@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# Personal database
+database.db
+
+# Environment and secret files
+.env
+
+# Editor settings
+.vscode/
