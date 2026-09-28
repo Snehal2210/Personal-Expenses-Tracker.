@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Add Expense - ExpenseTracker</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="expense-page">
+
+    <div class="expense-card">
+
+        <!-- Back Button -->
+        <a href="/dashboard" class="back-link">
+            ← Back to Dashboard
+        </a>
+        <button type="button" class="theme-toggle" id="theme-toggle">
+    🌙 Dark Mode
+</button>
+
+        <!-- Heading -->
+        <div class="expense-header">
+
+            <div class="expense-icon">
+                ₹
+            </div>
+
+            <div>
+                <h1>Add Expense</h1>
+
+                <p>
+                    Keep track of your spending
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- Expense Form -->
+
+        <form action="/add-expense"
+              method="POST"
+              class="expense-form">
+
+
+            <!-- Amount -->
+
+            <div class="form-group">
+
+                <label for="amount">
+                    Amount
+                </label>
+
+                <div class="input-box">
+
+                    <span>₹</span>
+
+                    <input
+                        type="number"
+                        id="amount"
+                        name="amount"
+                        step="0.01"
+                        min="0"
+                        placeholder="0.00"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- Category -->
+
+            <div class="form-group">
+
+                <label for="category">
+                    Category
+                </label>
+
+                <select
+                    id="category"
+                    name="category"
+                    required
+                >
+
+                    <option value="">
+                        Select a category
+                    </option>
+
+                    <option value="Food">
+                        🍔 Food
+                    </option>
+
+                    <option value="Travel">
+                        🚗 Travel
+                    </option>
+
+                    <option value="Shopping">
+                        🛍️ Shopping
+                    </option>
+
+                    <option value="Bills">
+                        📄 Bills
+                    </option>
+
+                    <option value="Education">
+                        📚 Education
+                    </option>
+
+                    <option value="Entertainment">
+                        🎬 Entertainment
+                    </option>
+
+                    <option value="Health">
+                        ❤️ Health
+                    </option>
+
+                    <option value="Other">
+                        📌 Other
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- Date -->
+
+            <div class="form-group">
+
+                <label for="date">
+                    Date
+                </label>
+
+                <input
+                    type="date"
+                    id="date"
+                    name="date"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Description -->
+
+            <div class="form-group">
+
+                <label for="description">
+                    Description
+                </label>
+
+                <textarea
+                    id="description"
+                    name="description"
+                    placeholder="What did you spend on?"
+                    rows="4"
+                ></textarea>
+
+            </div>
+
+
+            <!-- Buttons -->
+
+            <div class="expense-buttons">
+
+                <a href="/dashboard"
+                   class="cancel-btn">
+                    Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    class="save-btn"
+                >
+                    + Save Expense
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- Automatically select today's date -->
+
+</body>
+<script>
+
+    document.getElementById("date").value =
+        new Date().toISOString().split("T")[0];
+
+</script>
+<script>
+    const themeButton = document.getElementById("theme-toggle");
+
+    let currentTheme = localStorage.getItem("theme") || "light";
+
+    function applyTheme() {
+        document.body.classList.toggle(
+            "dark-mode",
+            currentTheme === "dark"
+        );
+
+        themeButton.textContent =
+            currentTheme === "dark"
+                ? "☀️ Light Mode"
+                : "🌙 Dark Mode";
+    }
+
+    themeButton.addEventListener("click", function () {
+        currentTheme =
+            currentTheme === "light" ? "dark" : "light";
+
+        localStorage.setItem("theme", currentTheme);
+        applyTheme();
+    });
+
+    applyTheme();
+</script>
+
+
+
+
+</html>

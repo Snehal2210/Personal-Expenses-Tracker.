@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Personal Expenses Tracker</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="page">
+
+        <div class="left-section">
+            <div class="brand">
+                <div class="logo">₹</div>
+                <h1>Expense<span>Tracker</span></h1>
+            </div>
+            <button type="button" class="theme-toggle" id="theme-toggle">
+    🌙 Dark Mode
+</button>
+
+            <div class="welcome">
+                <h2>Manage your money.<br>Build your future.</h2>
+
+                <p>
+                    Keep track of your daily expenses,
+                    understand your spending and take control
+                    of your finances.
+                </p>
+
+                <div class="features">
+                    <div>✓ Track your expenses</div>
+                    <div>✓ Organize your spending</div>
+                    <div>✓ Simple and secure</div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="right-section">
+
+            <div class="login-card">
+
+                <h2>Welcome Back!</h2>
+
+                <p class="subtitle">
+                    Login to continue to your account
+                </p>
+
+                <form action="/" method="POST">
+
+                    <label>Email Address</label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+
+                    <label>Password</label>
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        required
+                    >
+
+                    <button type="submit">
+                        Login
+                    </button>
+
+                </form>
+
+                <p class="signup-text">
+                    Don't have an account?
+                    <a href="/signup">Create Account</a>
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+</body>
+    <script>
+    const themeButton = document.getElementById("theme-toggle");
+
+    let currentTheme = localStorage.getItem("theme") || "light";
+
+    function applyTheme() {
+        document.body.classList.toggle(
+            "dark-mode",
+            currentTheme === "dark"
+        );
+
+        themeButton.textContent =
+            currentTheme === "dark"
+                ? "☀️ Light Mode"
+                : "🌙 Dark Mode";
+    }
+
+    themeButton.addEventListener("click", function () {
+        currentTheme =
+            currentTheme === "light" ? "dark" : "light";
+
+        localStorage.setItem("theme", currentTheme);
+        applyTheme();
+    });
+
+    applyTheme();
+</script>
+
+
+</html>

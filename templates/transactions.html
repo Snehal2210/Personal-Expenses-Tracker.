@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History | Personal Expenses Tracker</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="transactions-page">
+
+    <nav class="navbar">
+        <div class="brand">
+            <div class="logo">₹</div>
+            <h2>Expense<span>Tracker</span></h2>
+        </div>
+        
+
+        <a class="logout" href="{{ url_for('logout') }}">Logout ↗</a>
+    </nav>
+
+    <main class="transactions-container">
+
+        <div class="transactions-heading">
+            <div>
+                <div class="small-text">YOUR FINANCES</div>
+                <h1>Transaction History</h1>
+                <p>Track your income and expenses in one place.</p>
+            </div>
+
+            <a class="transactions-back"
+               href="{{ url_for('dashboard') }}">
+                ← Back to Dashboard
+            </a>
+            <button type="button" class="theme-toggle" id="theme-toggle">
+    🌙 Dark Mode
+</button>
+        </div>
+
+        {% set total_income = namespace(value=0) %}
+        {% set total_expenses = namespace(value=0) %}
+
+        {% for transaction in transactions %}
+            {% if transaction[0] == 'Income' %}
+                {% set total_income.value =
+                    total_income.value + transaction[2] %}
+            {% else %}
+                {% set total_expenses.value =
+                    total_expenses.value + transaction[2] %}
+            {% endif %}
+        {% endfor %}
+
+        <section class="transaction-summary">
+
+            <div class="transaction-summary-card">
+                <div class="summary-icon">₹</div>
+                <p class="summary-label">Net Balance</p>
+                <h2>₹{{ "%.2f"|format(
+                    total_income.value - total_expenses.value) }}</h2>
+            </div>
+
+            <div class="transaction-summary-card income">
+                <div class="summary-icon">↗</div>
+                <p class="summary-label">Total Income</p>
+                <h2>₹{{ "%.2f"|format(total_income.value) }}</h2>
+            </div>
+
+            <div class="transaction-summary-card expense">
+                <div class="summary-icon">↘</div>
+                <p class="summary-label">Total Expenses</p>
+                <h2>₹{{ "%.2f"|format(total_expenses.value) }}</h2>
+            </div>
+
+        </section>
+
+        <section class="transaction-table-card">
+
+            <div class="transaction-table-heading">
+                <h2>All Transactions</h2>
+                <p>Your complete list of recorded transactions</p>
+            </div>
+
+            {% if transactions %}
+
+            <div class="transaction-table-wrapper">
+                <table class="transaction-table">
+
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Transaction</th>
+                            <th>Category / Source</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for transaction in transactions %}
+                        <tr>
+
+                            <!-- Date -->
+                            <td>{{ transaction[3] }}</td>
+
+                            <!-- Transaction Type -->
+                            <td>
+                                {% if transaction[0] == 'Income' %}
+                                    <span class="transaction-type income">
+                                        Income
+                                    </span>
+                                {% else %}
+                                    <span class="transaction-type expense">
+                                        Expense
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <!-- Category or Income Source -->
+                            <td>{{ transaction[1] }}</td>
+
+                            <!-- Description -->
+                            <td>{{ transaction[4] or '-' }}</td>
+
+                            <!-- Amount -->
+                            <td>
+                                {% if transaction[0] == 'Income' %}
+                                    <span class="transaction-amount income">
+                                        + ₹{{ "%.2f"|format(transaction[2]) }}
+                                    </span>
+                                {% else %}
+                                    <span class="transaction-amount expense">
+                                        - ₹{{ "%.2f"|format(transaction[2]) }}
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+
+            {% else %}
+
+            <div class="transaction-empty">
+                <div class="empty-icon">₹</div>
+                <h3>No transactions yet</h3>
+                <p>Your income and expenses will appear here.</p>
+
+                <a class="transaction-add-button"
+                   href="{{ url_for('add_expense') }}">
+                    + Add Your First Expense
+                </a>
+            </div>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+</body>
+    <script>
+    const themeButton = document.getElementById("theme-toggle");
+
+    // Load the saved theme
+    let currentTheme = localStorage.getItem("theme") || "light";
+
+    function applyTheme() {
+        document.body.classList.toggle(
+            "dark-mode",
+            currentTheme === "dark"
+        );
+
+        themeButton.textContent =
+            currentTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
+    }
+
+    themeButton.addEventListener("click", function () {
+        currentTheme =
+            currentTheme === "light" ? "dark" : "light";
+
+        localStorage.setItem("theme", currentTheme);
+        applyTheme();
+    });
+
+    applyTheme();
+</script>
+</html>

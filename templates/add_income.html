@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Income | Personal Expenses Tracker</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="income-page">
+
+    <div class="income-wrapper">
+
+        <header class="income-navbar">
+            <a href="{{ url_for('dashboard') }}" class="income-brand">
+                💜 Expense Tracker
+            </a>
+
+            <div class="income-nav-actions">
+    <button type="button" id="theme-toggle" class="theme-toggle">
+        🌙 Dark Mode
+    </button>
+
+    <a href="{{ url_for('dashboard') }}" class="back-link">
+        ← Dashboard
+    </a>
+</div>
+        </header>
+
+        <main class="income-main">
+
+            <div class="income-heading">
+                <span class="income-icon">↗</span>
+                <h1>Add Income</h1>
+                <p>Record the money you have received.</p>
+            </div>
+
+            <div class="income-card">
+
+                <div class="income-card-heading">
+                    <h2>Income Details</h2>
+                    <p>Enter the details below to save your income.</p>
+                </div>
+
+                <form action="{{ url_for('add_income') }}" method="POST">
+
+                    <div class="income-field">
+                        <label for="amount">Amount (₹)</label>
+                        <input
+                            type="number"
+                            id="amount"
+                            name="amount"
+                            placeholder="Enter amount"
+                            min="0.01"
+                            step="0.01"
+                            required>
+                    </div>
+
+                    <div class="income-field">
+                        <label for="source">Income Source</label>
+                        <input
+                            type="text"
+                            id="source"
+                            name="source"
+                            placeholder="e.g. Pocket Money, Salary"
+                            required>
+                    </div>
+
+                    <div class="income-field">
+                        <label for="date">Date</label>
+                        <input
+                            type="date"
+                            id="date"
+                            name="date"
+                            required>
+                    </div>
+
+                    <div class="income-field">
+                        <label for="description">
+                            Description <span>(Optional)</span>
+                        </label>
+                        <textarea
+                            id="description"
+                            name="description"
+                            placeholder="Add a note about this income"
+                            rows="3"></textarea>
+                    </div>
+
+                    <button type="submit" class="save-income-btn">
+                        Save Income →
+                    </button>
+
+                </form>
+
+                <a href="{{ url_for('dashboard') }}"
+                   class="cancel-link">
+                    Cancel and go back
+                </a>
+
+            </div>
+
+            <p class="income-footer">
+                Keep track of your money, one entry at a time.
+            </p>
+
+        </main>
+    </div>
+
+</body>
+<script>
+    const themeButton = document.getElementById("theme-toggle");
+
+    // Load the saved theme
+    let currentTheme = localStorage.getItem("theme") || "light";
+
+    function applyTheme() {
+        document.body.classList.toggle(
+            "dark-mode",
+            currentTheme === "dark"
+        );
+
+        themeButton.textContent =
+            currentTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
+    }
+
+    themeButton.addEventListener("click", function () {
+        currentTheme =
+            currentTheme === "light" ? "dark" : "light";
+
+        localStorage.setItem("theme", currentTheme);
+        applyTheme();
+    });
+
+    applyTheme();
+</script>
+</html>

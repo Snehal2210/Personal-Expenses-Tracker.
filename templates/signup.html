@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Signup - Personal Expenses Tracker</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="page">
+
+        <div class="left-section">
+
+            <div class="brand">
+                <div class="logo">₹</div>
+                <h1>Expense<span>Tracker</span></h1>
+            </div>
+            
+
+            <div class="welcome">
+
+                <h2>Start tracking.<br>Save smarter.</h2>
+
+                <p>
+                    Create your account and start managing
+                    your personal expenses easily.
+                </p>
+
+                <div class="features">
+                    <div>✓ Track daily expenses</div>
+                    <div>✓ Organize your spending</div>
+                    <div>✓ Understand your money</div>
+                </div>
+
+            </div>
+
+        </div>
+        <button type="button" class="theme-toggle" id="theme-toggle">
+    🌙 Dark Mode
+</button>
+
+
+        <div class="right-section">
+
+            <div class="login-card">
+
+                <h2>Create Account</h2>
+
+                <p class="subtitle">
+                    Sign up to start tracking your expenses
+                </p>
+
+                <form action="/signup" method="POST">
+
+                    <label>Full Name</label>
+
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="Enter your name"
+                        required
+                    >
+
+                    <label>Email Address</label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+
+                    <label>Password</label>
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Create a password"
+                        required
+                    >
+
+                    <button type="submit">
+                        Create Account
+                    </button>
+
+                </form>
+
+                <p class="signup-text">
+                    Already have an account?
+                    <a href="/">Login</a>
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+</body>
+    <script>
+    const themeButton = document.getElementById("theme-toggle");
+
+    let currentTheme = localStorage.getItem("theme") || "light";
+
+    function applyTheme() {
+        document.body.classList.toggle(
+            "dark-mode",
+            currentTheme === "dark"
+        );
+
+        themeButton.textContent =
+            currentTheme === "dark"
+                ? "☀️ Light Mode"
+                : "🌙 Dark Mode";
+    }
+
+    themeButton.addEventListener("click", function () {
+        currentTheme =
+            currentTheme === "light" ? "dark" : "light";
+
+        localStorage.setItem("theme", currentTheme);
+        applyTheme();
+    });
+
+    applyTheme();
+</script>
+
+
+</html>

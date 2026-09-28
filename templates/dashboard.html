@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | ExpenseTracker</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="modern-dashboard">
+
+<div class="dashboard-page">
+
+    <!-- NAVIGATION -->
+    <nav class="navbar">
+        <a href="{{ url_for('dashboard') }}" class="dashboard-brand">
+            <div class="logo">₹</div>
+            <h2>Expense<span>Tracker</span></h2>
+        </a>
+
+        <div class="nav-right">
+            <span class="nav-greeting">
+                Hello, {{ name }}
+            </span>
+            <a href="{{ url_for('logout') }}" class="logout">
+                Logout ↗
+            </a>
+        </div>
+    </nav>
+
+
+    <!-- WELCOME HEADER -->
+    <header class="dashboard-header">
+
+        <div>
+            <div class="small-text">YOUR FINANCIAL OVERVIEW</div>
+
+            <h1>Welcome back, {{ name }}!</h1>
+
+            <p>Here's what's happening with your money.</p>
+        </div>
+
+        <div class="dashboard-buttons">
+            <a href="{{ url_for('add_expense') }}"
+               class="add-button expense-button">
+                <span>−</span> Add Expense
+            </a>
+            <button type="button" class="theme-toggle" id="theme-toggle">
+    🌙 Dark Mode
+</button>
+
+            <a href="{{ url_for('add_income') }}"
+               class="add-button income-button">
+                <span>+</span> Add Income
+            </a>
+        </div>
+        
+
+    </header>
+
+
+    <!-- SUMMARY CARDS -->
+    <section class="summary-cards">
+
+        <div class="summary-card balance-card">
+            <div class="modern-card-top">
+                <div class="modern-card-icon">₹</div>
+                <span class="card-label">TOTAL BALANCE</span>
+            </div>
+
+            <h2>₹{{ "%.2f"|format(total_balance) }}</h2>
+            <p>Your available balance</p>
+        </div>
+
+
+        <div class="summary-card income-card">
+            <div class="modern-card-top">
+                <div class="modern-card-icon">↗</div>
+                <span class="card-label">TOTAL INCOME</span>
+            </div>
+
+            <h2>₹{{ "%.2f"|format(total_income) }}</h2>
+            <p>Money received</p>
+        </div>
+
+
+        <div class="summary-card expenses-card">
+            <div class="modern-card-top">
+                <div class="modern-card-icon">↘</div>
+                <span class="card-label">TOTAL EXPENSES</span>
+            </div>
+
+            <h2>₹{{ "%.2f"|format(total_expenses) }}</h2>
+            <p>Money spent</p>
+        </div>
+
+
+        <div class="summary-card count-card">
+            <div class="modern-card-top">
+                <div class="modern-card-icon">▤</div>
+                <span class="card-label">TRANSACTIONS</span>
+            </div>
+
+            <h2>{{ expense_count + income_count }}</h2>
+            <p>All recorded transactions</p>
+        </div>
+
+    </section>
+
+
+    <!-- MAIN DASHBOARD -->
+    <main class="dashboard-content">
+
+        <!-- RECENT EXPENSES -->
+        <section class="recent-card">
+
+            <div class="modern-section-heading">
+                <div>
+                    <h2>Recent Expenses</h2>
+                    <p>Your latest spending activity</p>
+                </div>
+
+                <a href="{{ url_for('transactions') }}"
+                   class="view-link">
+                    View all →
+                </a>
+            </div>
+
+
+            {% if recent_expenses %}
+
+                <div class="modern-expense-list">
+
+                {% for expense in recent_expenses %}
+
+                    <div class="expense-item">
+
+                        <div class="expense-info">
+
+                            <div class="expense-category">
+                                {{ expense[1][:2]|upper }}
+                            </div>
+
+                            <div class="modern-expense-details">
+                                <strong>
+                                    {{ expense[3] if expense[3] else expense[1] }}
+                                </strong>
+
+                                <small>
+                                    {{ expense[1] }} · {{ expense[2] }}
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <div class="expense-amount">
+                            − ₹{{ "%.2f"|format(expense[0]) }}
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-expenses">
+                    <div class="empty-icon">₹</div>
+
+                    <h3>No expenses yet</h3>
+
+                    <p>
+                        Your spending activity will appear here.
+                        Add your first expense to get started.
+                    </p>
+
+                    <a href="{{ url_for('add_expense') }}"
+                       class="add-small">
+                        + Add your first expense
+                    </a>
+                </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- QUICK ACTIONS -->
+        <aside class="quick-card">
+
+            <div class="modern-section-heading">
+                <div>
+                    <h2>Quick Actions</h2>
+                    <p>Manage your money</p>
+                </div>
+            </div>
+
+
+            <a href="{{ url_for('add_expense') }}"
+               class="modern-action">
+                <span class="action-icon action-red">−</span>
+                <div>
+                    <strong>Add Expense</strong>
+                    <small>Record money spent</small>
+                </div>
+                <span class="action-arrow">→</span>
+            </a>
+
+
+            <a href="{{ url_for('add_income') }}"
+               class="modern-action">
+                <span class="action-icon action-green">+</span>
+                <div>
+                    <strong>Add Income</strong>
+                    <small>Record money received</small>
+                </div>
+                <span class="action-arrow">→</span>
+            </a>
+
+
+            <a href="{{ url_for('transactions') }}"
+               class="modern-action">
+                <span class="action-icon action-purple">▤</span>
+                <div>
+                    <strong>Transactions</strong>
+                    <small>View your full history</small>
+                </div>
+                <span class="action-arrow">→</span>
+            </a>
+
+        </aside>
+
+    </main>
+
+
+    <footer class="dashboard-footer">
+        <p>Made with care for your financial journey.</p>
+    </footer>
+
+</div>
+</body>
+
+<script>
+    const themeButton = document.getElementById("theme-toggle");
+
+    let currentTheme = localStorage.getItem("theme") || "light";
+
+    function applyTheme() {
+        document.body.classList.toggle(
+            "dark-mode",
+            currentTheme === "dark"
+        );
+
+        themeButton.textContent =
+            currentTheme === "dark"
+                ? "☀️ Light Mode"
+                : "🌙 Dark Mode";
+    }
+
+    themeButton.addEventListener("click", function () {
+        currentTheme =
+            currentTheme === "light" ? "dark" : "light";
+
+        localStorage.setItem("theme", currentTheme);
+        applyTheme();
+    });
+
+    applyTheme();
+</script>
+
+</html>
